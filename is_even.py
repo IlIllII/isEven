@@ -40,5 +40,6 @@ def isEvenDeep(i) -> bool:
     else:
         return False
 
+# We should test it, right?
 for i in range(10):
   print(f"{i} is even? {isEvenDeep(i)}")
