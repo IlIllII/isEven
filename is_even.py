@@ -17,6 +17,8 @@ TRAINING_QUANTITY = TRAINING_PARTITION + NUM_TRAINING_SAMPLES
 TEST_PARTITION = TRAINING_QUANTITY
 NUM_TEST_SAMPLES = 100
 TEST_QUANTITY = TEST_PARTITION + NUM_TEST_SAMPLES
+TRAINING_RANGE = range(TRAINING_PARTITION, TRAINING_QUANTITY)
+TESTING_RANGE = range(TEST_PARTITION, TEST_QUANTITY)
 TRAINING_EPOCHS = 10
 
 # Outcome representation
@@ -30,12 +32,16 @@ def onehot(i):
     else:
         return np.array(ONE_HOT_ODD)
 
+    
+def make_binary_array(i):
+    return np.array(list(binary_repr(i, BINARY_WORD_LENGTH)))
+    
+    
+x_train = np.array([make_binary_array(i) for i in TRAINING_RANGE])
+y_train = np.array([onehot(i) for i in TRAINING_RANGE])
 
-x_train = np.array([np.array(list(binary_repr(i, BINARY_WORD_LENGTH))) for i in range(TRAINING_PARTITION, TRAINING_QUANTITY)])
-y_train = np.array([onehot(i) for i in range(TRAINING_PARTITION, TRAINING_QUANTITY)])
-
-x_test = np.array([np.array(list(binary_repr(i, BINARY_WORD_LENGTH))) for i in range(TEST_PARTITION, TEST_QUANTITY)])
-y_test = np.array([onehot(i) for i in range(TEST_PARTITION, TEST_QUANTITY)])
+x_test = np.array([make_binary_array(i) for i in TESTING_RANGE])
+y_test = np.array([onehot(i) for i in TESTING_RANGE])
 
 model = tf.keras.models.Sequential(
     [
@@ -61,6 +67,6 @@ def isEvenDeep(i) -> bool:
     else:
         return False
 
-# We should test it, right?
+# We should confirm, right?
 for i in range(VISUAL_TEST_QUANTITY):
   print(f"{i} is even? {isEvenDeep(i)}")
